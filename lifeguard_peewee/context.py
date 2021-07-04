@@ -12,6 +12,8 @@ from lifeguard_peewee.settings import (
     LIFEGUARD_PEEWEE_DATABASE,
 )
 
+CONTEXT = {}
+
 
 class DatabaseNotImplementedException(Exception):
     """
@@ -23,6 +25,9 @@ def connection_factory():
     """
     Return database
     """
+
+    if "database" in CONTEXT:
+        return CONTEXT["database"]
 
     database = None
 
@@ -37,6 +42,6 @@ def connection_factory():
     else:
         raise DatabaseNotImplementedException(LIFEGUARD_PEEWEE_DBMS_NAME)
 
-    database.connect()
+    CONTEXT["database"] = database
 
     return database

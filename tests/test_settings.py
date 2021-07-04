@@ -27,7 +27,7 @@ class SettingsTest(unittest.TestCase):
         )
 
     def test_lifeguard_peewee_port(self):
-        self.assertEqual(LIFEGUARD_PEEWEE_PORT, "3306")
+        self.assertEqual(LIFEGUARD_PEEWEE_PORT, 3306)
         self.assertEqual(
             SETTINGS_MANAGER.settings["LIFEGUARD_PEEWEE_PORT"]["description"],
             "DBMS port",

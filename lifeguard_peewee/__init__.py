@@ -3,6 +3,7 @@ Lifeguard integration with MongoDB
 """
 from lifeguard.repositories import declare_implementation
 
+from lifeguard_peewee.context import CONTEXT
 from lifeguard_peewee.repositories import (
     PeeweeValidationRepository,
     PeeweeNotificationRepository,
@@ -12,6 +13,7 @@ from lifeguard_peewee.repositories import (
 class LifeguardPeeweePlugin:
     def __init__(self, lifeguard_context):
         self.lifeguard_context = lifeguard_context
+        CONTEXT["database"].connect()
         declare_implementation("notification", PeeweeNotificationRepository)
         declare_implementation("validation", PeeweeValidationRepository)
 

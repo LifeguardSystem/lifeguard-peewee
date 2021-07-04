@@ -1,8 +1,6 @@
 from peewee import BooleanField, CharField, DateTimeField, Model, TextField
 
-from lifeguard_peewee.connection import connection_factory
-
-DATABASE = connection_factory()
+from lifeguard_peewee.context import connection_factory
 
 
 class ValidationModel(Model):
@@ -15,7 +13,7 @@ class ValidationModel(Model):
         Base Model Meta
         """
 
-        database = DATABASE
+        database = connection_factory()
         db_table = "validations"
 
     validation_name = CharField(unique=True)
@@ -35,7 +33,7 @@ class NotificationModel(Model):
         Base Model Meta
         """
 
-        database = DATABASE
+        database = connection_factory()
         db_table = "notifications"
 
     validation_name = CharField(unique=True)
@@ -43,6 +41,3 @@ class NotificationModel(Model):
     is_opened = BooleanField()
     options = TextField()
     last_execution = DateTimeField()
-
-
-DATABASE.create_tables([ValidationModel, NotificationModel])
