@@ -1,0 +1,10 @@
+build
+dist
+*egg-info
+.coverage
+*.pyc
+htmlcov
+venv
+.mutmut-cache
+.coverage
+.nvimlog
