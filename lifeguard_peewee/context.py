@@ -1,7 +1,6 @@
 """
 Connection methods implementations
 """
-from peewee import MySQLDatabase
 
 from lifeguard_peewee.settings import (
     LIFEGUARD_PEEWEE_DBMS_NAME,
@@ -32,12 +31,16 @@ def connection_factory():
     database = None
 
     if LIFEGUARD_PEEWEE_DBMS_NAME == "mysql":
-        database = MySQLDatabase(
+        from playhouse.pool import PooledMySQLDatabase
+
+        database = PooledMySQLDatabase(
             LIFEGUARD_PEEWEE_DATABASE,
             user=LIFEGUARD_PEEWEE_USER,
             password=LIFEGUARD_PEEWEE_PASSWORD,
             host=LIFEGUARD_PEEWEE_HOST,
             port=LIFEGUARD_PEEWEE_PORT,
+            max_connections=15,
+            stale_timeout=120,
         )
     else:
         raise DatabaseNotImplementedException(LIFEGUARD_PEEWEE_DBMS_NAME)

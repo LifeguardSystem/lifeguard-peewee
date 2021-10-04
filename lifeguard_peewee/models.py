@@ -2,19 +2,18 @@ from peewee import BooleanField, CharField, DateTimeField, Model, TextField
 
 from lifeguard_peewee.context import connection_factory
 
+database = connection_factory()
 
-class ValidationModel(Model):
+
+class BaseModel(Model):
+    class Meta:
+        database = database
+
+
+class ValidationModel(BaseModel):
     """
     Validation Model
     """
-
-    class Meta:
-        """
-        Base Model Meta
-        """
-
-        database = connection_factory()
-        db_table = "validations"
 
     validation_name = CharField(unique=True)
     status = CharField()
@@ -22,22 +21,33 @@ class ValidationModel(Model):
     settings = TextField()
     last_execution = DateTimeField()
 
-
-class NotificationModel(Model):
-    """
-    Notification Model
-    """
-
     class Meta:
         """
         Base Model Meta
         """
 
-        database = connection_factory()
-        db_table = "notifications"
+        db_table = "validations"
+
+
+class NotificationModel(BaseModel):
+    """
+    Notification Model
+    """
 
     validation_name = CharField(unique=True)
     thread_ids = TextField()
     is_opened = BooleanField()
     options = TextField()
     last_execution = DateTimeField()
+
+    class Meta:
+        """
+        Base Model Meta
+        """
+
+        db_table = "notifications"
+
+
+def create_tables():
+    with database:
+        database.create_tables([ValidationModel, NotificationModel])

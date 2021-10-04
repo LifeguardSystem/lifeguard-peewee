@@ -14,7 +14,7 @@ SETTINGS_MANAGER = SettingsManager(
             "description": "DBMS password",
         },
         "LIFEGUARD_PEEWEE_DATABASE": {
-            "default": "db",
+            "default": "lifeguard",
             "description": "DBMS database name",
         },
     }

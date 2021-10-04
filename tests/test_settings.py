@@ -48,7 +48,7 @@ class SettingsTest(unittest.TestCase):
         )
 
     def test_lifeguard_peewee_database(self):
-        self.assertEqual(LIFEGUARD_PEEWEE_DATABASE, "db")
+        self.assertEqual(LIFEGUARD_PEEWEE_DATABASE, "lifeguard")
         self.assertEqual(
             SETTINGS_MANAGER.settings["LIFEGUARD_PEEWEE_DATABASE"]["description"],
             "DBMS database name",
