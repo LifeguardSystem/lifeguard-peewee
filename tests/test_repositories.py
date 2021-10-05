@@ -2,8 +2,8 @@ from datetime import datetime
 import unittest
 from unittest.mock import patch, MagicMock
 
-from lifeguard.notifications import NotificationStatus
 from lifeguard.validations import ValidationResponse
+from lifeguard_peewee.models import ValidationModel
 from lifeguard_peewee.repositories import (
     PeeweeNotificationRepository,
     PeeweeValidationRepository,
@@ -26,13 +26,13 @@ class TestPeeweeValidationRepository(unittest.TestCase):
     @patch("lifeguard_peewee.repositories.ValidationModel")
     def test_fetch_last_validation_result_not_none(self, mock_model):
         validation_name = "validation"
-        mock_model.get.return_value = {
-            "validation_name": "validation",
-            "status": "status",
-            "details": "{}",
-            "settings": "{}",
-            "last_execution": datetime(2020, 11, 19),
-        }
+        mock_model.get.return_value = ValidationModel(
+            validation_name="validation",
+            status="status",
+            details="{}",
+            settings="{}",
+            last_execution=datetime(2020, 11, 19),
+        )
 
         result = self.repository.fetch_last_validation_result(validation_name)
 
@@ -61,7 +61,7 @@ class TestPeeweeValidationRepository(unittest.TestCase):
             validation_name="name",
             status="status",
             details="{}",
-            settings="null",
+            settings="{}",
             last_execution=None,
         )
 
@@ -82,20 +82,20 @@ class TestPeeweeValidationRepository(unittest.TestCase):
             validation_name="name",
             status="status",
             details="{}",
-            settings="null",
+            settings="{}",
             last_execution=None,
         )
 
     @patch("lifeguard_peewee.repositories.ValidationModel")
     def test_fetch_all_validation_results_not_none(self, mock_model):
         mock_model.select.return_value = [
-            {
-                "validation_name": "validation",
-                "status": "status",
-                "details": "{}",
-                "settings": "{}",
-                "last_execution": datetime(2020, 11, 19),
-            }
+            ValidationModel(
+                validation_name="validation",
+                status="status",
+                details="{}",
+                settings="{}",
+                last_execution=datetime(2020, 11, 19),
+            )
         ]
 
         result = self.repository.fetch_all_validation_results()
