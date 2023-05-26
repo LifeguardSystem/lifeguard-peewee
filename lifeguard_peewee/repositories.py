@@ -55,11 +55,11 @@ class PeeweeValidationRepository:
 
     def __convert_to_validation(self, validation_document):
         return ValidationResponse(
-            validation_document.validation_name,
             validation_document.status,
             json.loads(validation_document.details),
             json.loads(validation_document.settings),
             last_execution=validation_document.last_execution,
+            validation_name=validation_document.validation_name,
         )
 
 

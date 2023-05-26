@@ -2,6 +2,7 @@ from datetime import datetime
 import unittest
 from unittest.mock import patch, MagicMock
 
+from lifeguard import NORMAL
 from lifeguard.validations import ValidationResponse
 from lifeguard_peewee.models import ValidationModel
 from lifeguard_peewee.repositories import (
@@ -28,7 +29,7 @@ class TestPeeweeValidationRepository(unittest.TestCase):
         validation_name = "validation"
         mock_model.get.return_value = ValidationModel(
             validation_name="validation",
-            status="status",
+            status=NORMAL,
             details="{}",
             settings="{}",
             last_execution=datetime(2020, 11, 19),
@@ -36,14 +37,13 @@ class TestPeeweeValidationRepository(unittest.TestCase):
 
         result = self.repository.fetch_last_validation_result(validation_name)
 
-        self.assertEqual(result.status, "status")
+        self.assertEqual(result.status, NORMAL)
         self.assertEqual(result.details, {})
         self.assertEqual(result.settings, {})
         self.assertEqual(result.last_execution, datetime(2020, 11, 19))
 
     @patch("lifeguard_peewee.repositories.ValidationModel")
     def test_save_validation_result_create(self, mock_model):
-
         return_where = MagicMock("return_where")
         return_where.count.return_value = 0
 
@@ -53,13 +53,13 @@ class TestPeeweeValidationRepository(unittest.TestCase):
 
         mock_model.select.return_value = return_select
 
-        response = ValidationResponse("name", "status", {})
+        response = ValidationResponse(NORMAL, {}, validation_name="name")
 
         self.repository.save_validation_result(response)
 
         mock_model.create.assert_called_with(
             validation_name="name",
-            status="status",
+            status=NORMAL,
             details="{}",
             settings="{}",
             last_execution=None,
@@ -74,13 +74,13 @@ class TestPeeweeValidationRepository(unittest.TestCase):
         return_select.where = MagicMock(name="where")
         return_select.where.return_value = return_where
 
-        response = ValidationResponse("name", "status", {})
+        response = ValidationResponse(NORMAL, {}, validation_name="name")
 
         self.repository.save_validation_result(response)
 
         mock_model.update.assert_called_with(
             validation_name="name",
-            status="status",
+            status=NORMAL,
             details="{}",
             settings="{}",
             last_execution=None,
@@ -91,7 +91,7 @@ class TestPeeweeValidationRepository(unittest.TestCase):
         mock_model.select.return_value = [
             ValidationModel(
                 validation_name="validation",
-                status="status",
+                status=NORMAL,
                 details="{}",
                 settings="{}",
                 last_execution=datetime(2020, 11, 19),
@@ -101,7 +101,7 @@ class TestPeeweeValidationRepository(unittest.TestCase):
         result = self.repository.fetch_all_validation_results()
 
         self.assertEqual(result[0].validation_name, "validation")
-        self.assertEqual(result[0].status, "status")
+        self.assertEqual(result[0].status, NORMAL)
         self.assertEqual(result[0].details, {})
         self.assertEqual(result[0].settings, {})
         self.assertEqual(result[0].last_execution, datetime(2020, 11, 19))
